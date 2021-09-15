@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Ma Reu</string>
+    <string name="filter_name">filter</string>
+    <string name="booking_activity">Meeting to book</string>
+    <string name="chose_date">Click for date</string>
+    <string name="chose_hour">Click for hour</string>
+    <string name="chose_mail">Participants eMails</string>
+    <string name="chose_place">Chose the meeting room</string>
+    <string name="book_meeting">Book</string>
+    <string name="type_subject">Type the subject</string>
+    <string name="chose_duration">Click for end hour</string>
+    <string name="Chose_a_date">Date of meeting :</string>
+    <string name="Meeting_start">Meeting start :</string>
+    <string name="duration_meeting">Meeting Stop :</string>
+    <string name="mail_participant">eMails :</string>
+    <string name="subject">Subject :</string>
+    <string name="chose_the_room">Chose the room :</string>
+    <string name="meeting_room">Meeting room</string>
+    <string name="later_end_date_than_start_date">You must put an end date, later than the start date</string>
+    <string name="date_not_eddited">You have to edit date</string>
+    <string name="hour_not_eddited">You have to edit hour</string>
+    <string name="end_date_not_eddited">You have to edit the end date</string>
+    <string name="all_meeting_room_busy">Chose an other time slot, all meeting room are busy at this crenel</string>
+    <string name="change_meeting_room">This meeting room is busy at this crenel, change meeting room</string>
+    <string name="error">ERROR</string>
+    <string name="mail_not_eddited">You have to edit eMails</string>
+    <string name="subject_not_eddited">You have to edit Subject</string>
+    <string name="meeting_room_not_eddited">Pick a meeting room</string>
+    <string name="room_filter">Meeting rooms</string>
+    <string name="date_filter">Chose a date</string>
+    <string name="clear_filter">Clean filter</string>
+    <string name="chose_a_date">Chose a date</string>
+    <string name="chose_meeting_rooms">Chose meeting rooms</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>

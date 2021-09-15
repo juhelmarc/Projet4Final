@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:checkable="false"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        android:title="Item"
+        android:visible="true"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/room_filter"
+                android:title="@string/chose_meeting_rooms"
+                app:actionViewClass="android.widget.ListView"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/date_filter"
+                android:title="@string/chose_a_date"
+                app:actionViewClass="android.widget.DatePicker"
+                app:showAsAction="always" />
+            <item
+                android:id="@+id/clear_filter"
+                android:title="@string/clear_filter"
+                app:showAsAction="always" />
+
+
+        </menu>
+    </item>
+
+
+</menu>
