@@ -91,12 +91,12 @@ public class DummyMeetingApiService implements MeetingApiService {
         }
         return roomNameList;
     }
-
+  // mettre en paramètre la
     @Override
-    public void applyRoomFilter(String room) {
+    public void applyRoomFilter(Room room) {
         if(room != null) {
             for (Meeting meeting : meetingList) {
-                if(meeting.getRoom().getRoomName().equals( room )) {
+                if(meeting.getRoom().getId() == room.getId()) {
                     meeting.setFiltered( true );
                 } else {
                     meeting.setFiltered( false );

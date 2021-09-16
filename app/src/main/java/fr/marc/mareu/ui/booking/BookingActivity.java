@@ -308,7 +308,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         }
         if (!dateEdited) {
             mDate.requestFocus();
-            Toast.makeText(this, getApplicationContext().getString(R.string.date_not_eddited), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.date_not_eddited), Toast.LENGTH_SHORT).show();
         } else if (!hourEdited) {
             mHour.requestFocus();
             Toast.makeText(this, getApplicationContext().getString(R.string.hour_not_eddited), Toast.LENGTH_SHORT).show();

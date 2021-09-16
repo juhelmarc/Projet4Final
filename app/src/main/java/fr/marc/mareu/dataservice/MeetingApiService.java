@@ -27,7 +27,7 @@ public interface MeetingApiService {
 
     List <String> getRoomNameList();
 
-    void applyRoomFilter(String room);
+    void applyRoomFilter(Room room);
 
     void applyDateFilter(String formatDate);
 

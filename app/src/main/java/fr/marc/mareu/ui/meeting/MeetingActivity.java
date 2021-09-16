@@ -16,14 +16,11 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 
-import com.google.android.material.tabs.TabLayout;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,15 +35,14 @@ import fr.marc.mareu.events.DeleteMeetingEvent;
 import fr.marc.mareu.model.Meeting;
 import fr.marc.mareu.ui.booking.BookingActivity;
 
- //TODO : singlechoicepicker pour les rooms
-//TODO : date datepicker exploiter le format date
+
 public class MeetingActivity extends AppCompatActivity    {
 
     private MeetingApiService mApiService;
     private List<Meeting> mMeetingList;
     private MyMeetingRecyclerViewAdapter mMeetingRecyclerViewAdapter;
     private LinearLayoutManager mLinearLayoutManager;
-    private String[] room;
+    private String[] roomList;
     private String dateFilter;
     private boolean isFiltered;
 
@@ -80,71 +76,75 @@ public class MeetingActivity extends AppCompatActivity    {
 
    @Override
    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-       room = mApiService.getRoomNameList().toArray( new String[0] );
-       room[room.length-1 ] = "Cancel";
 
-       if(item.getItemId() == R.id.room_filter) {
-           AlertDialog.Builder builder = new AlertDialog.Builder( this );
-           builder.setTitle( "Chose a room" )
-                   .setSingleChoiceItems( room, -1, new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int which) {
-                           if(room[which] != "Cancel") {
-                               mApiService.applyRoomFilter( room[which] );
-                               dialog.dismiss();
-                               Toast.makeText( getApplicationContext(), "taille liste = " + mApiService.getMeetingList( true ).size(), Toast.LENGTH_SHORT ).show();
-                               isFiltered = true;
-                               initRecyclerview( true );
-                           }
-                           dialog.dismiss();
-                       }
-                   } ).show();
+       switch (item.getItemId()) {
+           case R.id.room_filter:
+               initRoomPicker();
+               break;
 
-       }
-       if(item.getItemId() == R.id.date_filter) {
+           case R.id.date_filter:
+               initDatePicker();
+               break;
 
-           initDatePicker( item );
-       }
-       if(item.getItemId() == R.id.clear_filter) {
-           isFiltered = false;
-           initRecyclerview( false );
+           case R.id.clear_filter:
+               isFiltered = false;
+               initRecyclerview( false );
+               break;
 
+           default:
+               return false;
        }
        return false;
-    }
+   }
+
    @OnClick(R.id.floatingActionButton2)
    void startBookingActivity() {
        BookingActivity.navigate( this );
-
    }
-   private void initDatePicker(MenuItem item) {
+
+   private void initDatePicker() {
        Calendar calendar = Calendar.getInstance();
        int y = calendar.get( Calendar.YEAR );
        int m = calendar.get( Calendar.MONTH );
        int d = calendar.get( Calendar.DAY_OF_MONTH );
-
-       item.setOnMenuItemClickListener( new MenuItem.OnMenuItemClickListener() {
+       DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
            @Override
-           public boolean onMenuItemClick(MenuItem item) {
-               DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-                   @Override
-                   public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                       calendar.set( Calendar.DAY_OF_MONTH, view.getDayOfMonth() );
-                       calendar.set( Calendar.MONTH, view.getMonth() );
-                       calendar.set( Calendar.YEAR, view.getYear() );
+           public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+               calendar.set( Calendar.DAY_OF_MONTH, view.getDayOfMonth() );
+               calendar.set( Calendar.MONTH, view.getMonth() );
+               calendar.set( Calendar.YEAR, view.getYear() );
 
-                       dateFilter = formatDate( calendar.getTimeInMillis());
-                       mApiService.applyDateFilter( dateFilter ) ;
+               dateFilter = formatDate( calendar.getTimeInMillis());
+               mApiService.applyDateFilter( dateFilter ) ;
+               Toast.makeText( getApplicationContext(), "taille liste = " + mApiService.getMeetingList( true ).size(), Toast.LENGTH_SHORT ).show();
+               isFiltered = true;
+               initRecyclerview( true );
+           }
+       };
+       DatePickerDialog datePickerDialog = new DatePickerDialog( MeetingActivity.this, dateSetListener, y, m, d );
+       datePickerDialog.show();
+   }
+
+   private void initRoomPicker() {
+       roomList = mApiService.getRoomNameList().toArray( new String[0] );
+       AlertDialog.Builder builder = new AlertDialog.Builder( this );
+       builder.setTitle( "Chose a room" )
+               .setSingleChoiceItems( roomList, -1, new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       mApiService.applyRoomFilter( mApiService.getRoomList().get(which) );
+                       dialog.dismiss();
                        Toast.makeText( getApplicationContext(), "taille liste = " + mApiService.getMeetingList( true ).size(), Toast.LENGTH_SHORT ).show();
                        isFiltered = true;
                        initRecyclerview( true );
+                       dialog.dismiss();
                    }
-               };
-               DatePickerDialog datePickerDialog = new DatePickerDialog( MeetingActivity.this, dateSetListener, y, m, d );
-               datePickerDialog.show();
-               return true;
+               } ).setNegativeButton( "Cancel", new DialogInterface.OnClickListener() {
+           @Override
+           public void onClick(DialogInterface dialog, int which) {
+               dialog.dismiss();
            }
-       });
+       } ).show();
    }
    private String formatDate(Long dateMilli) {
        String format = "MMM dd.yyyy";
@@ -180,6 +180,5 @@ public class MeetingActivity extends AppCompatActivity    {
        EventBus.getDefault().unregister( this );
    }
 
-    //Todo : récupérer une référence de MyMeetingRecuclerViewAdapter + .notifyDataSetChange et ajouter la nouvelle liste dans l'adapter. Créer une fonction pour insérer une nouvelle liste
 
 }
